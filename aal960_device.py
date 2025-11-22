@@ -120,8 +120,6 @@ class SimDevice960:
         self.callback = callback
         self.top: Optional[tk.Toplevel] = None
 
-        self.running = False
-
         # UI state
         self.mode_var = tk.StringVar(value="I/P")
         self.p_val_var = tk.StringVar(value="0.0")
@@ -136,12 +134,10 @@ class SimDevice960:
         if self.top is not None and tk.Toplevel.winfo_exists(self.top):
             self.top.lift()
             return
-        self.running = True
         self._build_window()
 
     def stop(self):
         """Закрыть окно эмулятора."""
-        self.running = False
         if self.top is not None and tk.Toplevel.winfo_exists(self.top):
             self.top.destroy()
         self.top = None
@@ -232,8 +228,6 @@ class SimDevice960:
 
     def _send(self):
         """Считать значения из полей и отправить Measurement в callback."""
-        from aal960_protocol import Measurement  # локальный импорт, чтобы избежать циклов
-
         mode = self.mode_var.get()
 
         try:
